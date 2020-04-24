@@ -13,7 +13,7 @@
 #define RED 0
 #define GREEN 1
 #define BLUE 2
-#define SPECULAR_EXP 4
+#define SPECULAR_EXP 8
 
 // lighting functions
 color get_lighting( double *normal, double *view, color alight, double light[2][3], double *areflect, double *dreflect, double *sreflect);

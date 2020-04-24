@@ -56,7 +56,13 @@ double calculate_diffuse(double *light_vector,double light_value, double dreflec
 }
 
 double calculate_specular(double* light_vector, double light_value, double sreflect, double *view, double *normal ) {
-  return 0;
+  double R[3];
+  double cos_theta = dot_product(normal,light_vector);
+  R[0] = 2 * cos_theta * normal[0] - light_vector[0];
+  R[1] = 2 * cos_theta * normal[1] - light_vector[1];
+  R[2] = 2 * cos_theta * normal[2] - light_vector[2];
+  return light_value * sreflect * pow( dot_product(R,view), SPECULAR_EXP );
+					
 }
 
 //limit each component of c to a max of 255
