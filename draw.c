@@ -177,7 +177,7 @@ void add_polygon( struct matrix *polygons,
   ====================*/
 void draw_polygons( struct matrix *polygons, screen s, zbuffer zb, color c,
                     double *view, double light[2][3], color ambient,
-                    double *areflect, double *dreflect, double *sreflect) {
+                    double *areflect, double *dreflect, double *sreflect, int specular_exponent) {
   if ( polygons->lastcol < 3 ) {
     printf("Need at least 3 points to draw a polygon!\n");
     return;
@@ -193,7 +193,7 @@ void draw_polygons( struct matrix *polygons, screen s, zbuffer zb, color c,
     if ( normal[2] > 0 ) {
 
       // get color value only if front facing
-      color i = get_lighting(normal, view, ambient, light, areflect, dreflect, sreflect);
+      color i = get_lighting(normal, view, ambient, light, areflect, dreflect, sreflect,specular_exponent);
       scanline_convert(polygons, point, s, zb, i);
 
       /* draw_line( polygons->m[0][point], */

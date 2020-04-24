@@ -23,22 +23,22 @@
 
 
 //lighting functions
-color get_lighting( double *normal, double *view, color alight, double light[2][3], double *areflect, double *dreflect, double *sreflect) {
+color get_lighting( double *normal, double *view, color alight, double light[2][3], double *areflect, double *dreflect, double *sreflect, int specular_exponent ){
   normalize(normal);
   normalize(light[LOCATION]);
   color i;
   i.red =
 	calculate_ambient(alight.red,areflect[RED]) +
 	calculate_diffuse (light[LOCATION],light[COLOR][RED],dreflect[RED],normal) +
-	calculate_specular(light[LOCATION],light[COLOR][RED],sreflect[RED],view,normal);
+	calculate_specular(light[LOCATION],light[COLOR][RED],sreflect[RED],view,normal, specular_exponent);
   i.green =
   	calculate_ambient(alight.green,areflect[GREEN]) +
   	calculate_diffuse (light[LOCATION],light[COLOR][GREEN],dreflect[GREEN],normal) +
-  	calculate_specular(light[LOCATION],light[COLOR][GREEN],sreflect[GREEN],view,normal);
+  	calculate_specular(light[LOCATION],light[COLOR][GREEN],sreflect[GREEN],view,normal, specular_exponent);
   i.blue =
   	calculate_ambient(alight.blue,areflect[BLUE]) +
   	calculate_diffuse (light[LOCATION],light[COLOR][BLUE],dreflect[BLUE],normal) +
-  	calculate_specular(light[LOCATION],light[COLOR][BLUE],sreflect[BLUE],view,normal);
+  	calculate_specular(light[LOCATION],light[COLOR][BLUE],sreflect[BLUE],view,normal, specular_exponent);
   return i;
 }
 /*=========================
@@ -55,13 +55,13 @@ double calculate_diffuse(double *light_vector,double light_value, double dreflec
   // normalized in get_lighting()
 }
 
-double calculate_specular(double* light_vector, double light_value, double sreflect, double *view, double *normal ) {
+double calculate_specular(double* light_vector, double light_value, double sreflect, double *view, double *normal, int specular_exponent) {
   double R[3];
   double cos_theta = dot_product(normal,light_vector);
   R[0] = 2 * cos_theta * normal[0] - light_vector[0];
   R[1] = 2 * cos_theta * normal[1] - light_vector[1];
   R[2] = 2 * cos_theta * normal[2] - light_vector[2];
-  return light_value * sreflect * pow( dot_product(R,view), SPECULAR_EXP );
+  return light_value * sreflect * pow( dot_product(R,view), specular_exponent);
 					
 }
 

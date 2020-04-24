@@ -97,7 +97,7 @@ void parse_file ( char * filename,
   c.red = 0;
   c.green = 255;
   c.blue = 255;
-
+  int specular_exponent = 0;
   if ( strcmp(filename, "stdin") == 0 )
     f = stdin;
   else
@@ -106,7 +106,7 @@ void parse_file ( char * filename,
   while ( fgets(line, sizeof(line), f) != NULL ) {
     line[strlen(line)-1]='\0';
     //printf(":%s:\n",line);
-
+	
     double xvals[4];
     double yvals[4];
     double zvals[4];
@@ -139,7 +139,7 @@ void parse_file ( char * filename,
         xvals[1], yvals[1], zvals[1]);
       matrix_mult(peek(csystems), polygons);
       draw_polygons(polygons, s, zb, c,
-                    view, light, ambient, areflect, dreflect, sreflect);
+                    view, light, ambient, areflect, dreflect, sreflect, specular_exponent);
       polygons->lastcol = 0;
     }//end of box
 
@@ -152,7 +152,7 @@ void parse_file ( char * filename,
       add_sphere( polygons, xvals[0], yvals[0], zvals[0], r, step_3d);
       matrix_mult(peek(csystems), polygons);
       draw_polygons(polygons, s, zb, c,
-                    view, light, ambient, areflect, dreflect, sreflect);
+                    view, light, ambient, areflect, dreflect, sreflect,specular_exponent);
       polygons->lastcol = 0;
     }//end of sphere
 
@@ -165,7 +165,7 @@ void parse_file ( char * filename,
       add_torus( polygons, xvals[0], yvals[0], zvals[0], r, r1, step_3d);
       matrix_mult(peek(csystems), polygons);
       draw_polygons(polygons, s, zb, c,
-                    view, light, ambient, areflect, dreflect, sreflect);
+                    view, light, ambient, areflect, dreflect, sreflect,specular_exponent);
       polygons->lastcol = 0;
     }//end of torus
 
@@ -299,5 +299,8 @@ void parse_file ( char * filename,
       //clear_screen(s);
       save_extension(s, line);
     }//end save
+	else if ( strncmp(line, "exp++", strlen(line)) == 0 ) {
+	  specular_exponent++;
+	}
   }
 }

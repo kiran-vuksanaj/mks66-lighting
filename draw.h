@@ -16,7 +16,7 @@ void add_polygons( struct matrix * polys,
                    double x2, double y2, double z2);
 void draw_polygons( struct matrix * polys, screen s, zbuffer zb, color c,
                     double *view, double light[2][3], color ambient,
-                    double *areflect, double *dreflect, double *sreflect);
+                    double *areflect, double *dreflect, double *sreflect,int specular_exponent);
 
 //advanced shapes
 //3d shapes

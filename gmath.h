@@ -16,10 +16,10 @@
 #define SPECULAR_EXP 8
 
 // lighting functions
-color get_lighting( double *normal, double *view, color alight, double light[2][3], double *areflect, double *dreflect, double *sreflect);
+color get_lighting( double *normal, double *view, color alight, double light[2][3], double *areflect, double *dreflect, double *sreflect, int specular_exponent );
 double calculate_ambient(unsigned short alight, double areflect);
 double calculate_diffuse(double *light_vector, double light_value, double dreflect, double *normal );
-double calculate_specular(double* light_vector, double light_value,double sreflect, double *view, double *normal );
+double calculate_specular(double* light_vector, double light_value,double sreflect, double *view, double *normal, int specular_exponent);
 void limit_color( color * c );
 
 // vector functions
