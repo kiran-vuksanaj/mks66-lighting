@@ -5,6 +5,7 @@
 ### binary executables ###
 main
 gallery
+exp
 
 ### images ###
 *.png

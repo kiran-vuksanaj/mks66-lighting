@@ -4,9 +4,9 @@ LDFLAGS= -lm
 CC= gcc
 
 run: all
-	./main script
+	./exp | ./main
 
-all: $(OBJECTS)
+all: $(OBJECTS) exponent.c
 	$(CC) -o main $(OBJECTS) $(LDFLAGS)
 
 main.o: main.c display.h draw.h ml6.h matrix.h parser.h stack.h
@@ -29,6 +29,9 @@ gmath.o: gmath.c gmath.h matrix.h
 
 stack.o: stack.c stack.h matrix.h
 	$(CC) $(CFLAGS) -c stack.c
+
+exponent.c:
+	$(CC) -o exp exponent.c
 
 clean:
 	rm *.o *~
