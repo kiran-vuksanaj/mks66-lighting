@@ -24,6 +24,8 @@
 
 //lighting functions
 color get_lighting( double *normal, double *view, color alight, double light[2][3], double *areflect, double *dreflect, double *sreflect) {
+  normalize(normal);
+  normalize(light[LOCATION]);
   color i;
   i.red =
 	calculate_ambient(alight.red,areflect[RED]) +
@@ -48,7 +50,9 @@ double calculate_ambient(unsigned short alight, double areflect) {
 }
 
 double calculate_diffuse(double *light_vector,double light_value, double dreflect, double *normal ) {
-  return 0;
+  return light_value * dreflect * dot_product( normal , light_vector );
+  // P * k_d * ( N_hat . L_hat )
+  // normalized in get_lighting()
 }
 
 double calculate_specular(double* light_vector, double light_value, double sreflect, double *view, double *normal ) {
@@ -74,7 +78,8 @@ void normalize( double *vector ) {
 
 //Return the dot porduct of a . b
 double dot_product( double *a, double *b ) {
-  return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+  double dp = a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+  return dp < 0 ? 0 : dp;
 }
 
 
