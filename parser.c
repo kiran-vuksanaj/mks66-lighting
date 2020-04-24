@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <time.h>
 
 #include "ml6.h"
 #include "display.h"
@@ -88,7 +89,9 @@ void parse_file ( char * filename,
                   screen s, zbuffer zb,
                   double *view, color ambient, double light[2][3],
                   double *areflect, double *sreflect, double *dreflect) {
-
+  time_t init_time = time(NULL);
+  printf("+%7dsec %20s %s",0,"$begin",asctime(gmtime(&init_time)));
+  time_t now;
   FILE *f;
   char line[255];
   clear_screen(s);
@@ -299,5 +302,11 @@ void parse_file ( char * filename,
       //clear_screen(s);
       save_extension(s, line);
     }//end save
+	else if ( *line == '$' ){
+	  time(&now);
+	  printf("+%7dsec %20s %s",(int)difftime(now,init_time),line,asctime(gmtime(&now)));
+	}
   }
+  time(&now);
+  printf("+%7dsec %20s %s\n",(int)difftime(now,init_time),"$complete",asctime(gmtime(&now)));
 }
