@@ -66,7 +66,7 @@ void scanline_convert( struct matrix *points, int i, screen s, zbuffer zb, color
   /* c.red = (23 * (i/3))%255; */
   /* c.green = (109 * (i/3))%255; */
   /* c.blue = (c.blue+(227 * (i/3)))%255; */
-
+  
   //find bot, mid, top
   if ( y0 <= y1 && y0 <= y2) {
     bot = i;
@@ -113,9 +113,6 @@ void scanline_convert( struct matrix *points, int i, screen s, zbuffer zb, color
   distance0 = (int)(points->m[1][top]) - y + 1;
   distance1 = (int)(points->m[1][mid]) - y + 1;
   distance2 = (int)(points->m[1][top]) - (int)(points->m[1][mid]) + 1;
-  il.red = rand() % 192;
-  il.green = rand() % 192;
-  il.blue = rand() % 192;
 
   //printf("distance0: %d distance1: %d distance2: %d\n", distance0, distance1, distance2);
   dx0 = distance0 > 0 ? (points->m[0][top]-points->m[0][bot])/distance0 : 0;
@@ -240,12 +237,9 @@ void draw_polygons( struct matrix *polygons, screen s, zbuffer zb, color c,
 void add_box( struct matrix *polygons,
               double x, double y, double z,
               double width, double height, double depth ) {
-  double x0, y0, z0, x1, y1, z1;
-  x0 = x;
+  double x1,y1,z1;
   x1 = x+width;
-  y0 = y;
   y1 = y-height;
-  z0 = z;
   z1 = z-depth;
 
 

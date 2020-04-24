@@ -25,23 +25,34 @@
 //lighting functions
 color get_lighting( double *normal, double *view, color alight, double light[2][3], double *areflect, double *dreflect, double *sreflect) {
   color i;
+  i.red =
+	calculate_ambient(alight.red,areflect[RED]) +
+	calculate_diffuse (light[LOCATION],light[COLOR][RED],dreflect[RED],normal) +
+	calculate_specular(light[LOCATION],light[COLOR][RED],sreflect[RED],view,normal);
+  i.green =
+  	calculate_ambient(alight.green,areflect[GREEN]) +
+  	calculate_diffuse (light[LOCATION],light[COLOR][GREEN],dreflect[GREEN],normal) +
+  	calculate_specular(light[LOCATION],light[COLOR][GREEN],sreflect[GREEN],view,normal);
+  i.blue =
+  	calculate_ambient(alight.blue,areflect[BLUE]) +
+  	calculate_diffuse (light[LOCATION],light[COLOR][BLUE],dreflect[BLUE],normal) +
+  	calculate_specular(light[LOCATION],light[COLOR][BLUE],sreflect[BLUE],view,normal);
   return i;
 }
-
-color calculate_ambient(color alight, double *areflect ) {
-  color a;
-  return a;
+/*=========================
+  hi! i modified headers; i think its cleaner to have functions that just calculate each value, and merge them into the colors later. i hope this doesnt backfire :p 
+  -kiran
+  =========================*/
+double calculate_ambient(unsigned short alight, double areflect) {
+  return alight * areflect;
 }
 
-color calculate_diffuse(double light[2][3], double *dreflect, double *normal ) {
-  color d;
-  return d;
+double calculate_diffuse(double *light_vector,double light_value, double dreflect, double *normal ) {
+  return 0;
 }
 
-color calculate_specular(double light[2][3], double *sreflect, double *view, double *normal ) {
-
-  color s;
-  return s;
+double calculate_specular(double* light_vector, double light_value, double sreflect, double *view, double *normal ) {
+  return 0;
 }
 
 //limit each component of c to a max of 255

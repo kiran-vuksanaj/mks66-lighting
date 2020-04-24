@@ -17,9 +17,9 @@
 
 // lighting functions
 color get_lighting( double *normal, double *view, color alight, double light[2][3], double *areflect, double *dreflect, double *sreflect);
-color calculate_ambient(color alight, double *areflect );
-color calculate_diffuse(double light[2][3], double *dreflect, double *normal );
-color calculate_specular(double light[2][3], double *sreflect, double *view, double *normal );
+double calculate_ambient(unsigned short alight, double areflect);
+double calculate_diffuse(double *light_vector, double light_value, double dreflect, double *normal );
+double calculate_specular(double* light_vector, double light_value,double sreflect, double *view, double *normal );
 void limit_color( color * c );
 
 // vector functions
