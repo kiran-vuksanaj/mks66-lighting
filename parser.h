@@ -12,5 +12,6 @@ void parse_file ( char * filename,
                   screen s, zbuffer zb,
                   double *view, color ambient, double light[2][3],
                   double *areflect, double *sreflect, double *dreflect);
-
+void parse_obj ( char * filename,
+				 struct matrix * polygons);
 #endif
