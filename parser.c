@@ -11,6 +11,11 @@
 #include "parser.h"
 #include "stack.h"
 
+
+time_t init_time;
+time_t now;
+
+
 /*======== void parse_file () ==========
 Inputs:   char * filename
           struct stack * csystems
@@ -89,9 +94,8 @@ void parse_file ( char * filename,
                   screen s, zbuffer zb,
                   double *view, color ambient, double light[2][3],
                   double *areflect, double *sreflect, double *dreflect) {
-  time_t init_time = time(NULL);
-  printf("+%7dsec %20s %s",0,"$begin",asctime(gmtime(&init_time)));
-  time_t now;
+  init_time = time(NULL);
+  time_msg("$begin");
   FILE *f;
   char line[255];
   clear_screen(s);
@@ -293,6 +297,15 @@ void parse_file ( char * filename,
       //clear_screen(s);
       display( s );
     }//end display
+	else if ( strncmp(line, "parseobj", strlen(line)) == 0 ) {
+	  fgets(line, sizeof(line), f);
+	  *strchr(line,'\n') = 0;
+	  parse_obj( line, polygons );
+	  matrix_mult(peek(csystems),polygons);
+	  draw_polygons(polygons, s, zb, c,
+					view, light, ambient, areflect, dreflect, sreflect);
+	  polygons->lastcol = 0;
+	}
 
     else if ( strncmp(line, "save", strlen(line)) == 0 ) {
       //printf("SAVE\t%s", line);
@@ -303,10 +316,63 @@ void parse_file ( char * filename,
       save_extension(s, line);
     }//end save
 	else if ( *line == '$' ){
-	  time(&now);
-	  printf("+%7dsec %20s %s",(int)difftime(now,init_time),line,asctime(gmtime(&now)));
+	  time_msg(line);
 	}
   }
+  time_msg("$complete!");
+}
+
+void time_msg(char * msg){
   time(&now);
-  printf("+%7dsec %20s %s\n",(int)difftime(now,init_time),"$complete",asctime(gmtime(&now)));
+  printf("+%7dsec %20s %s",(int)difftime(now,init_time),msg,asctime(gmtime(&now)));  
+}
+
+void parse_obj(char * filename, struct matrix * polygons){
+  struct matrix * points;
+  FILE *f;
+  f = fopen(filename,"r");
+  points = new_matrix(4,4);
+  char line[255];
+  char *curtok = line;
+  char *remtok = line;
+  int linum = 0;
+  while ( fgets(line,sizeof(line), f) != NULL ) {
+	linum++;
+	line[strlen(line)-1] = '\0';
+
+	double coords[3];
+	int pindex[4];
+	int throw;
+	if(*line!='\0' && !strchr(line,'#')){
+	  /* printf("%d: %s\n",linum,line); */
+	  remtok = line;
+	  curtok = strsep(&remtok," ");
+	  if( strncmp(curtok,"v",strlen(curtok))==0 ){
+		/* printf("%d: vertex to add\n",linum); */
+		sscanf(remtok, "%lf %lf %lf",coords,coords+1,coords+2);
+		add_point(points,coords[0],coords[1],coords[2]);
+	  } //end vertex
+	  else if( strncmp(curtok,"f",strlen(curtok))==0 ){
+		sscanf(remtok,"%d/%d/%d %d/%d/%d %d/%d/%d %d/%d/%d",
+			   pindex,&throw,&throw,
+			   pindex+1,&throw,&throw,
+			   pindex+2,&throw, &throw,
+			   pindex+3,&throw, &throw);
+		pindex[0]--;
+		pindex[1]--;
+		pindex[2]--;
+		pindex[3]--;
+		add_polygon(polygons,
+					points->m[0][ pindex[0] ], points->m[1][ pindex[0] ],points->m[2][ pindex[0] ],
+					points->m[0][ pindex[1] ], points->m[1][ pindex[1] ],points->m[2][ pindex[1] ],
+					points->m[0][ pindex[2] ], points->m[1][ pindex[2] ],points->m[2][ pindex[2] ]);
+		add_polygon(polygons,
+					points->m[0][ pindex[0] ], points->m[1][ pindex[0] ],points->m[2][ pindex[0] ],
+					points->m[0][ pindex[2] ], points->m[1][ pindex[2] ],points->m[2][ pindex[2] ],
+					points->m[0][ pindex[3] ], points->m[1][ pindex[3] ],points->m[2][ pindex[3] ]);
+	  } //end face
+	}
+  }
+  time_msg("parseobj done");
+  /* print_matrix(points); */
 }
