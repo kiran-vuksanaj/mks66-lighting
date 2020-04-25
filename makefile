@@ -4,10 +4,13 @@ LDFLAGS= -lm
 CC= gcc
 
 run: all
-	./main script
+	rm frames/gallery*.png
+	./gallery | ./main
+	animate frames/gallery*.png
 
-all: $(OBJECTS)
+all: $(OBJECTS) gallery.o
 	$(CC) -o main $(OBJECTS) $(LDFLAGS)
+	$(CC) -o gallery gallery.o $(LDFLAGS)
 
 main.o: main.c display.h draw.h ml6.h matrix.h parser.h stack.h
 	$(CC) -c main.c
@@ -29,6 +32,9 @@ gmath.o: gmath.c gmath.h matrix.h
 
 stack.o: stack.c stack.h matrix.h
 	$(CC) $(CFLAGS) -c stack.c
+
+gallery.o: gallery.c
+	$(CC) $(CFLAGS) -c gallery.c
 
 clean:
 	rm *.o *~

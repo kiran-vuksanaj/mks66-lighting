@@ -112,8 +112,8 @@ void parse_file ( char * filename,
 
   while ( fgets(line, sizeof(line), f) != NULL ) {
     line[strlen(line)-1]='\0';
-    //printf(":%s:\n",line);
-
+    /* printf(":%s:\n",line); */
+	
     double xvals[4];
     double yvals[4];
     double zvals[4];
@@ -137,7 +137,7 @@ void parse_file ( char * filename,
 
     else if ( strncmp(line, "box", strlen(line)) == 0 ) {
       fgets(line, sizeof(line), f);
-      //printf("BOX\t%s", line);
+      /* printf("BOX\t%s", line); */
 
       sscanf(line, "%lf %lf %lf %lf %lf %lf",
        xvals, yvals, zvals,
@@ -373,6 +373,6 @@ void parse_obj(char * filename, struct matrix * polygons){
 	  } //end face
 	}
   }
-  time_msg("parseobj done");
+  /* time_msg("parseobj done"); */
   /* print_matrix(points); */
 }
