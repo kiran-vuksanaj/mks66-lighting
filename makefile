@@ -6,8 +6,9 @@ CC= gcc
 run: all
 	./exp | ./main
 
-all: $(OBJECTS) exponent.c
+all: $(OBJECTS) exponent.o
 	$(CC) -o main $(OBJECTS) $(LDFLAGS)
+	$(CC) -o exp exponent.o
 
 main.o: main.c display.h draw.h ml6.h matrix.h parser.h stack.h
 	$(CC) -c main.c
@@ -30,8 +31,13 @@ gmath.o: gmath.c gmath.h matrix.h
 stack.o: stack.c stack.h matrix.h
 	$(CC) $(CFLAGS) -c stack.c
 
-exponent.c:
-	$(CC) -o exp exponent.c
+exponent.o:
+	$(CC) -c exponent.c
 
 clean:
 	rm *.o *~
+
+
+
+
+
