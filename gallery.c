@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <math.h>
 
+#include "gallery.h"
+
+int frame;
+
 int main(){
   /* printf("push\nmove\n250 250 0\nrotate\nx 40\nscale\n3 3 3\n"); */
   /* printf("parseobj\nobj_files/Round_rosette_022.obj\n"); */
@@ -9,62 +13,40 @@ int main(){
 
   printf("push\n");
   printf("move\n 250 250 0\nrotate\nx -40\nrotate\ny -15\nrotate\nz -15\nscale\n1.5 1.5 1.5\n");
-  int frame = 0;
+  frame = 0;
   int i;
   double r;
-  for(r=0;r<M_PI;r+=(M_PI/50)){
-	printf("clear\n");
-	printf("push\n");
-	printf("move\n0 125 0\n");
-	printf("box\n 0 0 0 100 250 50\n");
-	printf("pop\n");
-	printf("push\n");
-	printf("move\n-100 125 0\n");
-	printf("box\n0 0 0 100 250 50\n");
-	printf("push\n");
-	printf("move\n50 -50 -10\n");
-	printf("rotate\nx 90\n");
+  for(r=0;r<M_PI;r+=(M_PI/25)){
 	double rot = 50 * (1 - cos(r) );
-	/* double rot = 90 * sin(10*r)/(5*r); */
-	printf("rotate\ny %lf\n", rot);
-	printf("parseobj\nobj_files/Round_rosette_022.obj\n");
-	printf("pop\n");
-	printf("pop\n");
-	printf("save\nframes/gallery%03d.png\n",frame);
-	printf("$frame %d complete\n",frame);
-	frame++;
+	gen_box(rot);
+	save_frame();
   }
-  for(i=0;i<15;i++){
-  	printf("save\nframes/gallery%03d.png\n",frame);
-  	printf("$frame %d complete\n",frame);
-  	frame++;
+  for(i=0;i<8;i++){
+	save_frame();
   }
-  for(r = 0.0; r < M_PI; r+=(M_PI/90) ){
-  	printf("clear\n");
-  	printf("push\n");
-  	printf("move\n0 125 0\n");
-  	printf("box\n 0 0 0 100 250 50\n");
-  	printf("pop\n");
-  	printf("push\n");
-  	printf("move\n-100 125 0\n");
-  	printf("box\n0 0 0 100 250 50\n");
-  	printf("push\n");
-  	printf("move\n50 -50 -10\n");
-  	printf("rotate\nx 90\n");
-  	/* double rot = -90.0 * (1+cos(r)); */
-  	double rot = 50 * sin(5*r)/(3*r);
-  	printf("rotate\ny %lf\n", rot);
-  	printf("parseobj\nobj_files/Round_rosette_022.obj\n");
-  	printf("pop\n");
-  	printf("pop\n");
+  for(r = 0.0; r < 7*M_PI/5; r+=(M_PI/45) ){
   	/* printf("display\n"); */
-  	printf("save\nframes/gallery%03d.png\n",frame);
-  	printf("$frame %d complete\n",frame);
-  	frame++;
+	double rot = 50 * sin(5*r)/(2.5*r);
+	gen_box(rot);
+	save_frame();
   }
-  for(i=0;i<15;i++){
-  	printf("save\nframes/gallery%03d.png\n",frame);
-  	printf("$frame %d complete\n",frame);
-  	frame++;
-  }
+  
+}
+
+void gen_box(double wheel_theta) {
+  printf("clear\n");
+  printf("box\n-100 100 0 200 200 50\n");
+  printf("push\n");
+  printf("rotate\nx 90\n");
+  printf("scale\n1.5 1.5 1.5\n");
+  /* double rot = -90.0 * (1+cos(r)); */
+  printf("rotate\ny %lf\n", wheel_theta);
+  printf("parseobj\nobj_files/Round_rosette_022.obj\n");
+  printf("pop\n");
+}
+
+void save_frame() {
+  printf("save\nframes/gallery%03d.png\n",frame);
+  printf("$frame %d complete\n",frame);
+  frame++;
 }
