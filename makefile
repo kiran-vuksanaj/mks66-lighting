@@ -6,9 +6,8 @@ CC= gcc
 run: all
 	./main script
 
-all: $(OBJECTS) gallery.c
+all: $(OBJECTS)
 	$(CC) -o main $(OBJECTS) $(LDFLAGS)
-	$(CC) -o gallery gallery.c
 
 main.o: main.c display.h draw.h ml6.h matrix.h parser.h stack.h
 	$(CC) -c main.c
